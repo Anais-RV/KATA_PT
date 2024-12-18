@@ -17,7 +17,7 @@ class SupervivienteTestCase(TestCase):
         self.assertEqual(superviviente.nivel, "Azul")
 
 
-    def test_superviviente_muere(self):
+    def test_superviviente_muere_con_dos_heridas(self):
 
         """ Test para verificar que el superviviente muere si recibe 2 heridas """
 
@@ -28,5 +28,5 @@ class SupervivienteTestCase(TestCase):
         superviviente.heridas = 2
 
         # Verificar que el superviviente ha muerto
-        self.assertTrue(superviviente.muerto)
+        self.assertTrue(superviviente.esta_muerto())
     
