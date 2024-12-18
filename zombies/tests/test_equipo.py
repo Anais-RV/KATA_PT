@@ -51,5 +51,22 @@ class EquipoTestCase(TestCase):
         self.assertEqual(superviviente.equipo.filter(tipo="Mano").count(), 2)
         self.assertEqual(superviviente.equipo.filter(tipo="Reserva").count(), 1)
 
+    def test_reducir_capacidad_por_heridas(self):
+        """Test para verificar que la capacidad de equipo se reduce por heridas."""
+
+        # Creamos un superviviente full equip
+        superviviente = Superviviente.objects.create(nombre="Arancha")
+        for i in range(1, 6):
+            Equipo.objects.create(nombre=f"Equipo_{i}", tipo="Reserva", superviviente=superviviente)
+        
+        # Le asignamos una herida al superviviente
+        superviviente.heridas = 1
+        superviviente.save()
+
+        # Verificamos que su capacidad ahora es de 4 piezas
+        self.assertEqual(superviviente.equipo.count(), 4)
+
+        # Validamos que una pieza haya sido descartada automáticamente
+        self.assertEqual(superviviente.equipo.filter(tipo="Reserva").count(), 4)
 
 
