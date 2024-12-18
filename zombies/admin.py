@@ -1,3 +1,10 @@
 from django.contrib import admin
+from zombies.models import Superviviente, Equipo
 
-# Register your models here.
+@admin.register(Superviviente)
+class SupervivienteAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Equipo)
+class EquipoAdmin(admin.ModelAdmin):
+    pass
