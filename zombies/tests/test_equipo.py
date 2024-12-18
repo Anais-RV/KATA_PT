@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from zombies.models import Equipo, Superviviente
 
@@ -23,7 +24,7 @@ class EquipoTestCase(TestCase):
             Equipo.objects.create(nombre=f"Equipo_{i}", tipo="Reserva", superviviente=superviviente)
 
         # Tratamos de agregar una sexta pieza directamente en la lógica de validación
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValidationError):
             Equipo.objects.create(nombre="Molotov", tipo="Reserva", superviviente=superviviente)
 
         # Verificamos que el superviviente aún tiene solo 5 piezas
