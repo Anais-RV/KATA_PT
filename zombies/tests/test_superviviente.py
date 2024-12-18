@@ -30,3 +30,12 @@ class SupervivienteTestCase(TestCase):
         # Verificar que el superviviente ha muerto
         self.assertTrue(superviviente.esta_muerto())
     
+    def test_superviviente_tiene_tres_acciones_por_turno(self):
+
+        """ Test para verificar que el superviviente tiene 3 acciones por turno """
+
+        # Creamos un superviviente con un nombre
+        superviviente = Superviviente(nombre="Arancha")
+
+        # Verificar que el superviviente tiene 3 acciones
+        self.assertEqual(superviviente.acciones, 3)
