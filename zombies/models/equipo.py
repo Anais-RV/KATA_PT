@@ -13,10 +13,16 @@ class Equipo(models.Model):
     superviviente = models.ForeignKey(Superviviente, on_delete=models.CASCADE, related_name="equipo")
 
     def save(self, *args, **kwargs):
-        # Max 5 piezas de equipo por superviviente
-        if self.superviviente and self.superviviente.equipo.count() >= 5:
+        # Validar que no haya más de 2 piezas "En Mano"
+        if self.tipo == "Mano" and self.superviviente.equipo.filter(tipo="Mano").count() >= 2:
+            raise ValidationError("Un superviviente no puede llevar más de 2 piezas en Mano.")
+        
+        # Validar que no haya más de 5 piezas totales
+        if self.superviviente.equipo.count() >= 5:
             raise ValidationError("Un superviviente no puede llevar más de 5 piezas de equipo.")
+        
         super().save(*args, **kwargs)
+
 
     def __str__(self):
         return f"{self.nombre} ({self.tipo})"
