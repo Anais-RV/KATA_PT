@@ -5,7 +5,7 @@ class Superviviente(models.Model):
         ('Azul', 'Azul'),
         ('Amarillo', 'Amarillo'),
         ('Naranja', 'Naranja'),
-        ('Rojo', 'Rojo'),
+        ('Rojo', 'Rojo')
     ]
 
     nombre = models.CharField(max_length=50)
