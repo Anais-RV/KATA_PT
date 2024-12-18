@@ -30,3 +30,25 @@ class EquipoTestCase(TestCase):
         # Verificamos que el superviviente aún tiene solo 5 piezas
         self.assertEqual(superviviente.equipo.count(), 5)
 
+    def test_distribuir_equipo_en_mano_y_reserva(self):
+        
+        """Test para verificar que las piezas de equipo se distribuyen entre 'En Mano' y 'En Reserva'."""
+
+        # Creamos un superviviente
+        superviviente = Superviviente.objects.create(nombre="Arancha")
+
+        # Creamos 3 piezas de equipo, intentando asignar 3 "En Mano"
+        Equipo.objects.create(nombre="Bate", tipo="Mano", superviviente=superviviente)
+        Equipo.objects.create(nombre="Katana", tipo="Mano", superviviente=superviviente)
+        
+        with self.assertRaises(ValueError):  # Verificamos que se lanza un error
+            Equipo.objects.create(nombre="Pistola", tipo="Mano", superviviente=superviviente)
+
+        # Creamos una pieza adicional "En Reserva"
+        Equipo.objects.create(nombre="Molotov", tipo="Reserva", superviviente=superviviente)
+
+        # Verificamos que el superviviente tiene exactamente 2 piezas "En Mano" y 1 en "Reserva"
+        self.assertEqual(superviviente.equipo.filter(tipo="Mano").count(), 2)
+        self.assertEqual(superviviente.equipo.filter(tipo="Reserva").count(), 1)
+
+
