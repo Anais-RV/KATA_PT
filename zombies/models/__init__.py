@@ -1,2 +1,2 @@
 from .superviviente import Superviviente
-# from .equipo import Equipo
+from .equipo import Equipo
