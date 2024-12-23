@@ -37,3 +37,7 @@ class Superviviente(models.Model):
         """ Guarda el objeto y ajusta el equipo si es necesario """
         super().save(*args, **kwargs)
         self.verificar_equipo()
+    
+    def __str__(self):
+        return f"{self.nombre} ({'Muerto' if self.esta_muerto() else 'Vivo'})"
+
