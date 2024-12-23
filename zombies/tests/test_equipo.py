@@ -77,3 +77,9 @@ class EquipoTestCase(TestCase):
 
         self.assertEqual(self.superviviente.equipo.count(), 5)
         self.assertEqual(superviviente2.equipo.count(), 1)
+    
+    def test_str_method(self):
+        """Test para validar la representación string de un Equipo"""
+        superviviente = Superviviente.objects.create(nombre="Arancha")
+        equipo = Equipo.objects.create(nombre="Katana", tipo="Mano", superviviente=superviviente)
+        self.assertEqual(str(equipo), "Katana (Mano)")
