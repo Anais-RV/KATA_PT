@@ -36,3 +36,28 @@ class PartidaTestCase(TestCase):
         superviviente2 = Superviviente.objects.create(nombre="Superviviente 1")
         with self.assertRaises(ValidationError):
             partida.supervivientes.add(superviviente2)
+
+    def test_partida_finaliza_si_supervivientes_muertos(self):
+        """Test para verificar que una partida finaliza si todos los supervivientes están muertos."""
+        
+        # Crear una partida
+        partida = Partida.objects.create(jugador="Jugador 1")
+        superviviente1 = Superviviente.objects.create(nombre="Superviviente 1", vivo=True)
+        superviviente2 = Superviviente.objects.create(nombre="Superviviente 2", vivo=True)
+        partida.supervivientes.add(superviviente1, superviviente2)
+        
+        # Verificar que la partida no ha finalizado
+        self.assertFalse(partida.finalizada)
+        
+        # Marcar a los supervivientes como muertos
+        superviviente1.vivo = False
+        superviviente1.save()
+        superviviente2.vivo = False
+        superviviente2.save()
+        
+        # Verificar que la partida ha finalizado
+        partida.refresh_from_db()
+        self.assertTrue(partida.finalizada)
+        
+        
+       
