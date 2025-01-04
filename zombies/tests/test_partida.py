@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 from zombies.models import Partida
 
 class PartidaTestCase(TestCase):
@@ -21,4 +22,15 @@ class PartidaTestCase(TestCase):
         # Verificar que la partida tiene dos supervivientes
         self.assertEqual(partida.supervivientes.count(), 2)
         
-    
+    def test_nombres_supervivientes_únicos_en_partida(self):
+        """Test para verificar que los nombres de los supervivientes en una partida son únicos."""
+        
+        # Crear una partida
+        partida = Partida.objects.create(jugador="Jugador 1")
+        
+        # Crear un superviviente
+        superviviente1 = partida.supervivientes.create(nombre="Superviviente 1")
+        
+        # Intentar crear otro superviviente con el mismo nombre
+        with self.assertRaises(ValidationError):
+            partida.supervivientes.create(nombre="Superviviente 1")
