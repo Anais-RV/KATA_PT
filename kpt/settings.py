@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'zombies',
     'rest_framework',
     'drf_yasg',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

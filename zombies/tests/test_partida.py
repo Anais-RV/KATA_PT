@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from zombies.models import Partida, Superviviente
+from rest_framework import status
 from django.db import IntegrityError
 
 class PartidaTestCase(TestCase):
@@ -60,6 +61,8 @@ class PartidaTestCase(TestCase):
         partida.refresh_from_db()
         self.assertTrue(partida.finalizada)
 
-        
-        
-       
+        # Test para listar todas las partidas creadas. 
+
+        response = self.client.get('/api/partidas/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json(),[])
