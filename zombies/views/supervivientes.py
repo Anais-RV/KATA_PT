@@ -1,15 +1,12 @@
-from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from zombies.models import Superviviente
 from zombies.serializers import SupervivienteSerializer
 from rest_framework import status
 
-class SupervivientesView(APIView):
-    def get(self, request):
-        # Obtenemos todos los supervivientes
-        supervivientes = Superviviente.objects.all()
-        serializer = SupervivienteSerializer(supervivientes, many=True)
-        return Response(serializer.data)
+class SupervivientesView(ModelViewSet):
+    queryset = Superviviente.objects.all()
+    serializer_class = SupervivienteSerializer
 
     def post(self, request):
         # Creamos un nuevo superviviente

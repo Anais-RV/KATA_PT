@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from zombies.models import Equipo, Superviviente
+import pytest
 
 class EquipoTestCase(TestCase):
 
@@ -78,8 +79,11 @@ class EquipoTestCase(TestCase):
         self.assertEqual(self.superviviente.equipo.count(), 5)
         self.assertEqual(superviviente2.equipo.count(), 1)
     
+    @pytest.mark.django_db
     def test_str_method(self):
         """Test para validar la representación string de un Equipo"""
+        Superviviente.objects.all().delete()  # Limpia la tabla antes de crear nuevos registros
         superviviente = Superviviente.objects.create(nombre="Arancha")
+        self.assertEqual(str(superviviente), "Arancha (Vivo)")
         equipo = Equipo.objects.create(nombre="Katana", tipo="Mano", superviviente=superviviente)
         self.assertEqual(str(equipo), "Katana (Mano)")
