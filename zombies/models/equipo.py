@@ -12,7 +12,17 @@ class Equipo(models.Model):
     tipo = models.CharField(max_length=10, choices=TIPO_EQUIPO, default="Mano")
     superviviente = models.ForeignKey(Superviviente, on_delete=models.CASCADE, related_name="equipo")
 
+    def validar_tipo(self):
+        """Validamos el tipo de equipo."""
+        tipos_validos = [tipo for tipo, _ in self.TIPO_EQUIPO]
+        if self.tipo not in tipos_validos:
+            raise ValidationError(f"El tipo de equipo '{self.tipo}' no es válido. Opciones: {tipos_validos}")
+
     def save(self, *args, **kwargs):
+
+        # Validar el tipo de equipo
+        self.validar_tipo()
+
         # Validar que no haya más de 2 piezas "En Mano"
         if self.tipo == "Mano" and self.superviviente.equipo.filter(tipo="Mano").count() >= 2:
             raise ValidationError("Un superviviente no puede llevar más de 2 piezas en Mano.")

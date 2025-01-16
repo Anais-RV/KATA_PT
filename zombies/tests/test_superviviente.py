@@ -39,3 +39,13 @@ class SupervivienteTestCase(TestCase):
 
         # Verificar que el superviviente tiene 3 acciones
         self.assertEqual(superviviente.acciones, 3)
+    
+    def test_str_method(self):
+        """Test para validar la representación string de un Superviviente"""
+        superviviente = Superviviente.objects.create(nombre="Arancha", heridas=0)
+        self.assertEqual(str(superviviente), "Arancha (Vivo)")
+
+        # Simula un superviviente muerto
+        superviviente.heridas = 2
+        superviviente.save()
+        self.assertEqual(str(superviviente), "Arancha (Muerto)")
