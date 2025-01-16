@@ -61,8 +61,10 @@ class PartidaTestCase(TestCase):
         partida.refresh_from_db()
         self.assertTrue(partida.finalizada)
 
-        # Test para listar todas las partidas creadas. 
-
+    
+    def test_listar_partidas(self):
+        """Test para verificar que se pueden listar las partidas."""
+        
         response = self.client.get('/api/partidas/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(),[])

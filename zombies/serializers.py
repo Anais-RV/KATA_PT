@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from zombies.models import Superviviente, Equipo
+from zombies.models import Superviviente, Equipo, Partida
 
 class SupervivienteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,3 +10,9 @@ class EquipoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipo
         fields = ['id', 'nombre', 'tipo', 'superviviente']
+
+class PartidaSerializer (serializers.ModelSerializer):
+    supervivientes = SupervivienteSerializer(many=True)
+    class Meta:
+        model = Partida
+        fields = ['id', 'jugador', 'supervivientes', 'finalizada']
