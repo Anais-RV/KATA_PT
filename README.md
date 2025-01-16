@@ -49,15 +49,10 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
-### 2. Cerar un superusuario 
+### 2. Crear un superusuario 
 
 ```bash
 python manage.py createsuperuser
-```
-### 3. Cerar un superusuario 
-
-```bash
-python manage.py runserver
 ```
 
 ## 🧪 Pruebas
