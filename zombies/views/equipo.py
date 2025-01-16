@@ -1,15 +1,13 @@
 from django.core.exceptions import ValidationError
-from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from zombies.models import Equipo
 from zombies.serializers import EquipoSerializer
 
-class EquipoView(APIView):
-    def get(self, request):
-        equipo = Equipo.objects.all()
-        serializer = EquipoSerializer(equipo, many=True)
-        return Response(serializer.data)
+class EquipoView(ModelViewSet):
+    queryset = Equipo.objects.all()
+    serializer_class = EquipoSerializer
 
     def post(self, request):
         serializer = EquipoSerializer(data=request.data)

@@ -1,10 +1,7 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 from zombies.models import Partida
 from zombies.serializers import PartidaSerializer
 
-class PartidasView (APIView):
-    def get(self, request):
-        partidas = Partida.objects.all()
-        serializer = PartidaSerializer(partidas, many=True)
-        return Response(serializer.data)
+class PartidasView(ModelViewSet):
+    queryset = Partida.objects.all()
+    serializer_class = PartidaSerializer

@@ -11,8 +11,7 @@ class EquipoSerializer(serializers.ModelSerializer):
         model = Equipo
         fields = ['id', 'nombre', 'tipo', 'superviviente']
 
-class PartidaSerializer (serializers.ModelSerializer):
-    supervivientes = SupervivienteSerializer(many=True)
+class PartidaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partida
         fields = ['id', 'jugador', 'supervivientes', 'finalizada']
