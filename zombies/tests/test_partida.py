@@ -68,3 +68,11 @@ class PartidaTestCase(TestCase):
         response = self.client.get('/api/partidas/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(),[])
+    
+    def test_crear_partida(self):
+        """Test para verificar que se puede crear una partida."""
+        
+        data = {'jugador': 'Jugador 1'}
+        response = self.client.post('/api/partidas/', data, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['jugador'], 'Jugador 1')
