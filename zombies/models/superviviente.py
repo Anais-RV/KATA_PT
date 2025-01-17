@@ -33,10 +33,22 @@ class Superviviente(models.Model):
             if not pieza_a_descartar:
                 pieza_a_descartar = self.equipo.first()
             pieza_a_descartar.delete()
+    
+    def actualizar_nivel(self):
+        """Actualiza el nivel del superviviente según la experiencia"""
+        if self.experiencia >= 43:
+            self.nivel = 'Rojo'
+        elif self.experiencia >= 19:
+            self.nivel = 'Naranja'
+        elif self.experiencia >= 7:
+            self.nivel = 'Amarillo'
+        else:
+            self.nivel = 'Azul'
 
     def save(self, *args, **kwargs):
         """Asegura que el atributo 'vivo' refleja el estado actual del superviviente"""
         self.vivo = not self.esta_muerto()
+        self.actualizar_nivel()
         super().save(*args, **kwargs)
         self.verificar_equipo()
 
