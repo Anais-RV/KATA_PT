@@ -20,19 +20,35 @@ class Superviviente(models.Model):
     def esta_muerto(self):
         """Devuelve True si el superviviente ha muerto"""
         return self.heridas >= 2
+    
+    def esta_vivo(self):
+        """Devuelve True si el superviviente está vivo."""
+        print(f"Comprobando si {self.nombre} está vivo: {self.vivo}")
+        return self.vivo
 
     def capacidad_equipo(self):
         """Calcula la capacidad máxima de equipo según las heridas"""
         return max(5 - self.heridas, 0)
 
     def verificar_equipo(self):
-        """Elimina piezas de equipo si exceden la capacidad máxima"""
+        """Elimina piezas de equipo si exceden la capacidad máxima."""
         capacidad = self.capacidad_equipo()
-        while self.equipo.count() > capacidad:
-            pieza_a_descartar = self.equipo.filter(tipo="Reserva").first()
-            if not pieza_a_descartar:
-                pieza_a_descartar = self.equipo.first()
-            pieza_a_descartar.delete()
+        equipo_actual = self.equipo.all()
+        exceso = equipo_actual.count() - capacidad  # Número de piezas a eliminar
+
+        print(f"Capacidad actual: {capacidad}, Piezas actuales: {equipo_actual.count()}, Exceso: {exceso}")
+
+        if exceso > 0:
+            piezas_a_eliminar = self.equipo.filter(tipo="Reserva")[:exceso]  # Prioriza tipo "Reserva"
+            for pieza in piezas_a_eliminar:
+                pieza.delete()
+            
+            # Si aún hay exceso, elimina otras piezas
+            exceso_restante = self.equipo.all().count() - capacidad
+            if exceso_restante > 0:
+                piezas_adicionales = self.equipo.all()[:exceso_restante]
+                for pieza in piezas_adicionales:
+                    pieza.delete()
     
     def actualizar_nivel(self):
         """Actualiza el nivel del superviviente según la experiencia"""
@@ -46,11 +62,14 @@ class Superviviente(models.Model):
             self.nivel = 'Azul'
 
     def save(self, *args, **kwargs):
-        """Asegura que el atributo 'vivo' refleja el estado actual del superviviente"""
+        """Actualiza el estado antes de guardar."""
         self.vivo = not self.esta_muerto()
+        print(f"Guardando {self.nombre}: vivo={self.vivo}, heridas={self.heridas}")
         self.actualizar_nivel()
         super().save(*args, **kwargs)
-        self.verificar_equipo()
+        self.verificar_equipo()  # Llama a verificar_equipo después de guardar
+
+
 
     def __str__(self):
         return f"{self.nombre} ({'Muerto' if self.esta_muerto() else 'Vivo'})"

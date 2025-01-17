@@ -9,6 +9,7 @@ class Partida(models.Model):
     jugador = models.CharField(max_length=100, unique=True)
     supervivientes = models.ManyToManyField('Superviviente', related_name='partidas', blank=True)
     finalizada = models.BooleanField(default=False)
+    nivel = models.CharField(max_length=50, default='Azul', choices=Superviviente.NIVELES)
 
     def actualizar_estado(self):
         """
@@ -19,6 +20,23 @@ class Partida(models.Model):
             self.finalizada = all(s.esta_muerto() for s in self.supervivientes.all())
         else:
             self.finalizada = False  # Si no hay supervivientes, no se finaliza
+        self.save()
+    
+    def actualizar_nivel(self):
+        """El nivel de la partida es igual al nivel más alto entre los supervivientes vivos."""
+        supervivientes_vivos = self.supervivientes.filter(vivo=True)  # Filtrar solo vivos
+        print(f"Supervivientes vivos: {[s.nombre for s in supervivientes_vivos]}")
+
+        niveles = [s.nivel for s in supervivientes_vivos]
+        print(f"Niveles de supervivientes vivos: {niveles}")
+
+        if niveles:
+            niveles_ordenados = ['Azul', 'Amarillo', 'Naranja', 'Rojo']
+            self.nivel = max(niveles, key=lambda nivel: niveles_ordenados.index(nivel))
+        else:
+            self.nivel = 'Azul'  # Si no hay supervivientes vivos, nivel es Azul
+
+        print(f"Nivel calculado para la partida: {self.nivel}")
         self.save()
 
     def __str__(self):
@@ -45,3 +63,4 @@ def actualizar_estado_partidas(sender, instance, **kwargs):
     """
     for partida in instance.partidas.all():
         partida.actualizar_estado()
+        partida.actualizar_nivel()
